@@ -1,0 +1,36 @@
+{
+  "name": "aryafoulad",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@geoman-io/leaflet-geoman-free": "^2.18.3",
+    "@types/node": "^22.13.11",
+    "@types/react": "^19.0.12",
+    "clsx": "^2.1.1",
+    "jalaali-js": "^1.2.8",
+    "leaflet": "^1.9.4",
+    "moment-jalaali": "^0.10.4",
+    "next": "15.2.3",
+    "persian-date": "^1.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "react-leaflet": "^5.0.0",
+    "react-multi-date-picker": "^4.5.2",
+    "tailwind-merge": "^3.0.2",
+    "typescript": "^5.8.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.3",
+    "tailwindcss": "^4"
+  }
+}
