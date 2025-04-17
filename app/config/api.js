@@ -4,7 +4,7 @@ console.log('Current environment:', process.env.NODE_ENV); // برای دیبا�
 
 export const API_BASE_URL = isDevelopment
   ? 'http://localhost:3000'
-  : 'https://api-v2.parandx.com';
+  : 'https://api.parandx.com';
 
 export const API_ENDPOINTS = {
   unitLocations: {
