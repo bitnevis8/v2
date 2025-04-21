@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { useMap } from 'react-leaflet';
 
-const SearchBox = ({ onLocationSelect }) => {
-  const map = useMap();
+const SearchBox = ({ onSearchSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,18 +46,18 @@ const SearchBox = ({ onLocationSelect }) => {
 
   const handleResultClick = (result) => {
     const { lat, lon, display_name } = result;
-    map.setView([lat, lon], 15);
-    onLocationSelect({
-      lat: parseFloat(lat),
-      lng: parseFloat(lon),
-      name: display_name
-    });
+    if (onSearchSelect) {
+      onSearchSelect([parseFloat(lat), parseFloat(lon)]);
+    }
     setSearchTerm('');
     setResults([]);
   };
 
   return (
-    <div className="absolute top-4 left-4 z-[1000] bg-white p-2 rounded-lg shadow-lg w-64">
+    <div 
+      className="bg-white p-2 rounded-lg shadow-lg w-full" 
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="relative">
         <input
           type="text"

@@ -76,6 +76,12 @@ const MissionOrderCreate = () => {
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [defaultRate, setDefaultRate] = useState(null);
   const [rateLoading, setRateLoading] = useState(true);
+  const [mapCenter, setMapCenter] = useState(ARYAFOULAD_COORDS);
+
+  // Function to update map center from SearchBox
+  const handleSearchSelect = (coords) => {
+    setMapCenter(coords);
+  };
 
   // Load unit locations on component mount
   useEffect(() => {
@@ -87,11 +93,12 @@ const MissionOrderCreate = () => {
         }
         const data = await response.json();
         setUnitLocations(data.data || []);
-        // Set default unit
         const defaultUnit = data.data.find(unit => unit.isDefault);
         if (defaultUnit) {
           setSelectedUnit(defaultUnit);
-          setValue('fromUnit', defaultUnit.name); // Set the fromUnit value
+          setValue('fromUnit', defaultUnit.name);
+          // Set initial map center to default unit if available
+          setMapCenter([defaultUnit.latitude, defaultUnit.longitude]);
         }
       } catch (error) {
         console.error("Error fetching unit locations:", error);
@@ -162,8 +169,8 @@ const MissionOrderCreate = () => {
     const unit = unitLocations.find(u => u.id === unitId);
     setSelectedUnit(unit);
     setValue('fromUnit', unit.name);
-    
-    // Recalculate route with new origin
+    setMapCenter([unit.latitude, unit.longitude]);
+
     if (destinations.length > 0) {
       await calculateRoute(unit, destinations);
     }
@@ -275,9 +282,16 @@ const MissionOrderCreate = () => {
       <div className="bg-white rounded-lg shadow-lg p-2 sm:p-6">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">حکم ماموریت</h1>
         
+        {/* Place SearchBox here, BEFORE the map container, pass the handler */}
+        <div className="mb-4 max-w-lg mx-auto">
+          <SearchBox onSearchSelect={handleSearchSelect} />
+        </div>
+
+        {/* Map Container div */}
         <div className="w-full h-[400px] border rounded-lg mb-6 relative">
           <MapContainer
-            center={selectedUnit ? [selectedUnit.latitude, selectedUnit.longitude] : [31.348808655624506, 48.72288275224326]}
+            center={mapCenter}
+            key={mapCenter.toString()}
             zoom={13}
             style={{ height: '100%', width: '100%' }}
             scrollWheelZoom={true}
@@ -295,12 +309,11 @@ const MissionOrderCreate = () => {
             {route && route.forward && <Polyline positions={route.forward} color="blue" weight={3} />}
             {route && route.return && <Polyline positions={route.return} color="red" weight={3} />}
             <MapEvents onLocationSelect={handleLocationSelect} />
-            <SearchBox onLocationSelect={handleLocationSelect} />
           </MapContainer>
-          {watch('distance') && (
+          {watch('totalDistance') && (
             <div className="absolute bottom-4 right-4 bg-white p-2 sm:p-3 rounded-lg shadow-lg text-sm sm:text-base">
-              <span className="font-medium">فاصله: </span>
-              <span className="text-blue-600">{watch('distance')} کیلومتر</span>
+              <span className="font-medium">مسافت کل: </span>
+              <span className="text-blue-600">{watch('totalDistance') || '0'} کیلومتر</span>
             </div>
           )}
         </div>
