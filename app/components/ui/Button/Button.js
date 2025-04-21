@@ -8,6 +8,7 @@ const Button = ({
   className = "",
   disabled = false,
   onClick,
+  loading,
   ...props
 }) => {
   const baseStyles = "rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -36,10 +37,13 @@ const Button = ({
     <button
       type={type}
       className={classes}
-      disabled={disabled}
+      disabled={disabled || loading}
       onClick={onClick}
       {...props}
     >
+      {loading ? (
+        <span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
+      ) : null}
       {children}
     </button>
   );
